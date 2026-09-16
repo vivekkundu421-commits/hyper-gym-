@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Varun Classes</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: #f0f4f8; overflow-x: hidden; }
+
+    /* Splash Screen Animation */
+    #splash-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(135deg, #FF416C, #FF4B2B);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 0.8s ease 2.7s forwards;
+    }
+    .logo-avatar {
+      width: 110px; height: 110px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 42px; font-weight: 900; color: #FF416C;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      animation: pulse 1.5s infinite alternate;
+    }
+    .splash-title {
+      color: white; font-size: 32px; font-weight: bold; margin-top: 20px;
+      letter-spacing: 1px; animation: slideUp 1s ease;
+    }
+
+    @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+    @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { 0% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+
+    /* App Header */
+    header {
+      background: linear-gradient(135deg, #6A11CB, #2575FC);
+      color: white; padding: 20px; text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Container */
+    .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+    .section-title { font-size: 22px; color: #333; margin-bottom: 20px; text-align: center; font-weight: bold; }
+
+    /* Cards */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+    .card {
+      background: white; border-radius: 15px; padding: 20px; text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08); cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .icon { font-size: 36px; margin-bottom: 10px; }
+    .card-title { font-size: 16px; font-weight: bold; color: #444; }
+
+    .bg-maths { border-top: 5px solid #FF4757; }
+    .bg-science { border-top: 5px solid #2ED573; }
+    .bg-english { border-top: 5px solid #1E90FF; }
+    .bg-hindi { border-top: 5px solid #FFA500; }
+    .bg-sst { border-top: 5px solid #9B59B6; }
+
+    #chapter-view { display: none; }
+    .back-btn {
+      background: #2575FC; color: white; border: none; padding: 10px 20px;
+      border-radius: 20px; cursor: pointer; font-weight: bold; margin-bottom: 20px;
+    }
+    .chapter-card {
+      background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-pdf {
+      background: #FF4757; color: white; border: none; padding: 8px 15px;
+      border-radius: 8px; cursor: pointer; font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Splash Screen -->
+  <div id="splash-screen">
+    <div class="logo-avatar">VC</div>
+    <div class="splash-title">Varun Classes</div>
+  </div>
+
+  <header>
+    <h1>Varun Classes</h1>
+    <p>Class 10th Learning Portal</p>
+  </header>
+
+  <div class="container">
+    <div id="subject-view">
+      <h2 class="section-title">Select Your Subject</h2>
+      <div class="grid">
+        <div class="card bg-maths" onclick="openSubject('Maths')">
+          <div class="icon">📐</div>
+          <div class="card-title">Maths</div>
+        </div>
+        <div class="card bg-science" onclick="openSubject('Science')">
+          <div class="icon">🧪</div>
+          <div class="card-title">Science</div>
+        </div>
+        <div class="card bg-english" onclick="openSubject('English')">
+          <div class="icon">📖</div>
+          <div class="card-title">English</div>
+        </div>
+        <div class="card bg-hindi" onclick="openSubject('Hindi')">
+          <div class="icon">✍️</div>
+          <div class="card-title">Hindi</div>
+        </div>
+        <div class="card bg-sst" onclick="openSubject('Social Science')">
+          <div class="icon">🌍</div>
+          <div class="card-title">Social Science</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="chapter-view">
+      <button class="back-btn" onclick="showSubjects()">← Back to Subjects</button>
+      <h2 id="selected-subject-title" class="section-title">Subject Chapters</h2>
+      <div id="chapters-list"></div>
+    </div>
+  </div>
+
+  <script>
+    const chaptersData = {
+      Maths: ["Real Numbers", "Polynomials", "Pair of Linear Equations", "Quadratic Equations", "Arithmetic Progressions", "Triangles", "Coordinate Geometry", "Introduction to Trigonometry"],
+      Science: ["Chemical Reactions & Equations", "Acids, Bases & Salts", "Metals & Non-metals", "Carbon & its Compounds", "Life Processes", "Control & Coordination"],
+      English: ["A Letter to God", "Nelson Mandela: Long Walk to Freedom", "Two Stories about Flying", "From the Diary of Anne Frank", "A Triumph of Surgery"],
+      Hindi: ["सूरदास के पद", "राम-लक्ष्मण-परशुराम संवाद", "नेताजी का चश्मा", "बालगोबिन भगत", "माता का अंचल"],
+      "Social Science": ["The Rise of Nationalism in Europe", "Nationalism in India", "Resources and Development", "Forest and Wildlife Resources", "Power Sharing"]
+    };
+
+    function openSubject(subject) {
+      document.getElementById('subject-view').style.display = 'none';
+      document.getElementById('chapter-view').style.display = 'block';
+      document.getElementById('selected-subject-title').innerText = subject + " Chapters";
+
+      const listContainer = document.getElementById('chapters-list');
+      listContainer.innerHTML = '';
+
+      chaptersData[subject].forEach((ch, index) => {
+        const item = document.createElement('div');
+        item.className = 'chapter-card';
+        item.innerHTML = `
+          <div>
+            <h4>Ch ${index + 1}: ${ch}</h4>
+            <small style="color: #666;">Includes Notes, Examples & Exercises</small>
+          </div>
+          <button class="btn-pdf" onclick="alert('Opening PDF for Chapter ${index + 1}: ${ch}')">View PDF</button>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    function showSubjects() {
+      document.getElementById('chapter-view').style.display = 'none';
+      document.getElementById('subject-view').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
